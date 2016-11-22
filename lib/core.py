@@ -4,7 +4,7 @@ from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D
 
 TF_WEIGHTS_PATH = 'https://github.com/rcmalli/keras-vggface/releases/download/v1.0/rcmalli_vggface_tf_weights_tf_ordering.h5'
 
-def VGGFace(weight_path=None, freeze=False):
+def VGGFace(weight_path=None, freeze=False, classes=2622):
   input_shape = (224, 224, 3)
    
   # Block 1
@@ -40,10 +40,10 @@ def VGGFace(weight_path=None, freeze=False):
   model.add(Flatten(name='flatten'))
   model.add(Dense(4096, activation='relu', name='fc6'))
   model.add(Dense(4096, activation='relu', name='fc7'))
-  model.add(Dense(2622, activation='softmax', name='fc8')) # VGGFace Class Size
+  model.add(Dense(classes, activation='softmax', name='fc8')) # VGGFace Class Size
 
   if weight_path:
-    model.load_weights(weights_path)
+    model.load_weights(weight_path)
 
   if freeze:
     for layer in model.layers:

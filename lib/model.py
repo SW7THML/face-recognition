@@ -1,6 +1,7 @@
 from .core import VGGFace
 from keras.layers import Dense
 from keras.optimizers import SGD
+from .utils import Maximizer
 
 class FaceRecognitionClassifier:
   def __init__(self, course_users):
@@ -17,7 +18,7 @@ class FaceRecognitionClassifier:
     self.model.compile(optimizer=sgd, loss='sparse_categorical_crossentropy', metrics=["accuracy"])
 
     # train
-    self.model.fit(X, y, batch_size=32, nb_epoch=20, shuffle=True, verbose=1)
+    self.model.fit(X, y, batch_size=32, nb_epoch=2, shuffle=True, verbose=1)
 
   def predict(self, X):
     prediction = self.model.predict(X)
@@ -28,9 +29,8 @@ class FaceRecognitionClassifier:
 
     return [y for _, y in coord]
 
-
   def load_weights(self, weight_path):
-    self.model = VGGFace(weight_path, True)
+    self.model = VGGFace(weight_path, freeze=True, classes=len(self.course_users))
 
   def save_weights(self, weight_path):
     self.model.save_weights(weight_path)
